@@ -2,10 +2,19 @@
   "name": "mongoose-schema-ts-infer",
   "version": "0.1.0",
   "description": "Infer document type from mongoose schema",
-  "main": "src/index.ts",
+  "main": "./lib/index.js",
+  "types": "./lib/index.d.ts",
+  "exports": {
+    ".": {
+      "require": "./lib/index.js",
+      "types": "./index.d.ts"
+    },
+    "./package.json": "./package.json"
+  },
   "scripts": {
     "lint:check": "eslint --ext .ts ./src",
-    "lint:fix": "eslint --fix --ext .ts ./src"
+    "lint:fix": "eslint --fix --ext .ts ./src",
+    "build": "tsc"
   },
   "repository": {
     "type": "git",
@@ -31,7 +40,9 @@
     "eslint-plugin-import": "^2.26.0",
     "eslint-plugin-n": "^15.2.4",
     "eslint-plugin-promise": "^6.0.0",
-    "mongoose": "^6.5.2",
     "typescript": "^4.7.4"
+  },
+  "dependencies": {
+    "mongoose": "*"
   }
 }

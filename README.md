@@ -1,1 +1,3 @@
-# mongoose-ts-schema-infer
+# mongoose-schema-ts-infer
+
+🚧 Under construction 🚧
