@@ -1,0 +1,1 @@
+# mongoose-ts-schema-infer
