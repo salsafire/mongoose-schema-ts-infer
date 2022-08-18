@@ -11,7 +11,8 @@ const userSchema = {
   bestFriend: mongoose.Types.ObjectId,
   birthdate: Date,
   isOk: {type: Boolean, required: true as const},
-  buf: Buffer
+  buf: Buffer,
+  dec: {type: mongoose.Types.Decimal128}
 }
 
 type User = InferFromSchema<typeof userSchema>;
@@ -24,5 +25,6 @@ const user: User = {
   bestFriend: new mongoose.Types.ObjectId(),
   birthdate: new Date(),
   isOk: false,
-  buf: Buffer.from('Hello, World')
+  buf: Buffer.from('Hello, World'),
+  dec: new mongoose.Types.Decimal128('11')
 }

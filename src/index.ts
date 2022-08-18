@@ -9,6 +9,7 @@ type Type =
   | BufferConstructor
   | typeof mongoose.Schema.Types.Mixed
   | typeof mongoose.Types.ObjectId
+  | typeof mongoose.Types.Decimal128
 
 type Enum = readonly unknown[]
 
@@ -46,7 +47,9 @@ type ConvertSchemaTypeToTypescriptType<T extends Type> = T extends StringConstru
               ? Record<string, unknown>
               : T extends typeof mongoose.Types.ObjectId
                 ? mongoose.Types.ObjectId
-                : never
+                : T extends typeof mongoose.Types.Decimal128
+                  ? mongoose.Types.Decimal128
+                  : never
 
 type EnumOrType<T, E extends Enum | undefined> = E extends Enum ? E[number] : T
 
