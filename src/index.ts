@@ -7,6 +7,7 @@ type Type =
   | NumberConstructor
   | BooleanConstructor
   | BufferConstructor
+  | MapConstructor
   | typeof mongoose.Schema.Types.Mixed
   | typeof mongoose.Types.ObjectId
   | typeof mongoose.Types.Decimal128
@@ -17,6 +18,7 @@ interface FieldType {
   type: Type
   required?: boolean
   enum?: readonly unknown[]
+  of?: Type
 }
 
 type ShorthandNotation = Type
@@ -31,25 +33,31 @@ interface SchemaType {
   | SchemaType[]
 }
 
-type ConvertSchemaTypeToTypescriptType<T extends Type> = T extends StringConstructor
+type MapType<Field extends FieldType> = Field['of'] extends Type
+  ? Map<string, ConvertSchemaTypeToTypescriptType<{ type: Field['of'] }>>
+  : Map<string, any>
+
+type ConvertSchemaTypeToTypescriptType<Field extends FieldType> = Field['type'] extends StringConstructor
   ? string
-  : T extends BooleanConstructor
+  : Field['type'] extends BooleanConstructor
     ? boolean
-    : T extends DateConstructor
+    : Field['type'] extends DateConstructor
       ? Date
-      : T extends NumberConstructor
+      : Field['type'] extends NumberConstructor
         ? number
-        : T extends BufferConstructor
+        : Field['type'] extends BufferConstructor
           ? Buffer
-          : T extends ObjectConstructor
-            ? Record<string, unknown>
-            : T extends typeof mongoose.Schema.Types.Mixed
+          : Field['type'] extends MapConstructor
+            ? MapType<Field>
+            : Field['type'] extends ObjectConstructor
               ? Record<string, unknown>
-              : T extends typeof mongoose.Types.ObjectId
-                ? mongoose.Types.ObjectId
-                : T extends typeof mongoose.Types.Decimal128
-                  ? mongoose.Types.Decimal128
-                  : never
+              : Field['type'] extends typeof mongoose.Schema.Types.Mixed
+                ? Record<string, unknown>
+                : Field['type'] extends typeof mongoose.Types.ObjectId
+                  ? mongoose.Types.ObjectId
+                  : Field['type'] extends typeof mongoose.Types.Decimal128
+                    ? mongoose.Types.Decimal128
+                    : never
 
 type EnumOrType<T, E extends Enum | undefined> = E extends Enum ? E[number] : T
 
@@ -57,8 +65,8 @@ type MaybeRequired<Type, Required = true | false | undefined> = Required extends
   ? Type
   : Type | undefined
 
-type ConvertShorthandNotation<T extends ShorthandNotation> = MaybeRequired<ConvertSchemaTypeToTypescriptType<T>, false>
-type ConvertClassicNotation<Field extends ClassicNotation> = MaybeRequired<EnumOrType<ConvertSchemaTypeToTypescriptType<Field['type']>, Field['enum']>, Field['required']>
+type ConvertShorthandNotation<T extends ShorthandNotation> = MaybeRequired<ConvertSchemaTypeToTypescriptType<{ type: T }>, false>
+type ConvertClassicNotation<Field extends ClassicNotation> = MaybeRequired<EnumOrType<ConvertSchemaTypeToTypescriptType<Field>, Field['enum']>, Field['required']>
 
 type RequiredKeys<TObj extends Record<string, unknown>> = {
   [Field in keyof TObj]: TObj[Field] extends Exclude<TObj[Field], undefined>

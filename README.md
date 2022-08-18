@@ -69,23 +69,25 @@ We don't support (yet) all the types. They will come! Feel free to create MR to 
 | `mongoose.Types.ObjectId`     | `mongoose.Types.ObjectId`   |
 | `Array`                       | `Array`                     |
 | `mongoose.Types.Decimal128`   | `mongoose.Types.Decimal128` |
-| `Map`                         | ❌                           |
+| `Map`                         | `Map`                       |
 | `Schema`                      | ❌                           |
 | Nested                        | ✅                           |
 
 Both shorthand notation (`{name: String}`) and "classic" notation (`{name: {type: String}}`) are supported.
 For the latter, some options are also taken into account:
 
-| Option name | typescript infer                                            | Example                                                                                |
-|-------------|-------------------------------------------------------------|----------------------------------------------------------------------------------------|
-| `required`  | Mark the field as optional or not (default:`false`)         | `{name: {type: String, required: false as const} }` gives `{name?:string}`             |
-| `enum`      | Restrict the value to one of the specified item in the list | `{accept: {type: String, enum: ['yes','no'] as const} }` gives `{accept:'yes' / 'no'}` |
+| Option name | typescript infer                                                 | Example                                                                                |
+|-------------|------------------------------------------------------------------|----------------------------------------------------------------------------------------|
+| `required`  | Mark the field as optional or not (default:`false`)              | `{name: {type: String, required: false as const} }` gives `{name?:string}`             |
+| `enum`      | Restrict the value to one of the specified item in the list      | `{accept: {type: String, enum: ['yes','no'] as const} }` gives `{accept:'yes' / 'no'}` |
+| `of`        | Restrict values of the `Map` to a specific type (default: `any`) | `{name: {type: Map, of: Number} }` gives `{name?: Map<string,number>}`                 |
 
 # Examples
 
-All examples are available in the [examples](./examples) folder:
+All examples are available in the "[examples](./examples)" folder:
 
 - [The basics](./examples/basic.ts)
 - [enum option](./examples/enum.ts)
 - [array](./examples/array.ts)
 - [nested schema](./examples/nested.ts)
+- [Map](./examples/map.ts)
