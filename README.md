@@ -57,21 +57,21 @@ const document: IUser = {
 
 We don't support (yet) all the types. They will come! Feel free to create MR to add if you are in the hurry 😁.
 
-| Schema type                   | typescript type |
-|-------------------------------|-----------------|
-| `String`                      | `string`        |
-| `Number`                      | `number`        |
-| `Date`                        | `Date`          |
-| `Buffer`                      | ❌               |
-| `Boolean`                     | `boolean`       |
-| `mongoose.Schema.Types.Mixed` | `object`        |
-| `Object`                      | `object`        |
-| `mongoose.Types.ObjectId`     | `ObjectId`      |
-| `Array`                       | `Array`         |
-| `Decimal128`                  | ❌               |
-| `Map`                         | ❌               |
-| `Schema`                      | ❌               |
-| Nested                        | ✅               |
+| Schema type                   | typescript type           |
+|-------------------------------|---------------------------|
+| `String`                      | `string`                  |
+| `Number`                      | `number`                  |
+| `Date`                        | `Date`                    |
+| `Buffer`                      | `Buffer`                  |
+| `Boolean`                     | `boolean`                 |
+| `mongoose.Schema.Types.Mixed` | `object`                  |
+| `Object`                      | `object`                  |
+| `mongoose.Types.ObjectId`     | `mongoose.Types.ObjectId` |
+| `Array`                       | `Array`                   |
+| `Decimal128`                  | ❌                         |
+| `Map`                         | ❌                         |
+| `Schema`                      | ❌                         |
+| Nested                        | ✅                         |
 
 Both shorthand notation (`{name: String}`) and "classic" notation (`{name: {type: String}}`) are supported.
 For the latter, some options are also taken into account:

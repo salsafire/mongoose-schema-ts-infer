@@ -10,7 +10,8 @@ const userSchema = {
   mixed: {type: mongoose.Schema.Types.Mixed, required: true as const},
   bestFriend: mongoose.Types.ObjectId,
   birthdate: Date,
-  isOk: {type: Boolean, required: true as const}
+  isOk: {type: Boolean, required: true as const},
+  buf: Buffer
 }
 
 type User = InferFromSchema<typeof userSchema>;
@@ -23,4 +24,5 @@ const user: User = {
   bestFriend: new mongoose.Types.ObjectId(),
   birthdate: new Date(),
   isOk: false,
+  buf: Buffer.from('Hello, World')
 }
