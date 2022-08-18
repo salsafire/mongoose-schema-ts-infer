@@ -5,6 +5,7 @@ type Type =
   | DateConstructor
   | ObjectConstructor
   | NumberConstructor
+  | BooleanConstructor
   | typeof mongoose.Types.ObjectId
 
 type Enum = readonly unknown[]
@@ -29,15 +30,17 @@ interface SchemaType {
 
 type ConvertSchemaTypeToTypescriptType<T extends Type> = T extends StringConstructor
   ? string
-  : T extends DateConstructor
-    ? Date
-    : T extends NumberConstructor
-      ? number
-      : T extends ObjectConstructor
-        ? Record<string, unknown>
-        : T extends typeof mongoose.Types.ObjectId
-          ? mongoose.Types.ObjectId
-          : never
+  : T extends BooleanConstructor
+    ? boolean
+    : T extends DateConstructor
+      ? Date
+      : T extends NumberConstructor
+        ? number
+        : T extends ObjectConstructor
+          ? Record<string, unknown>
+          : T extends typeof mongoose.Types.ObjectId
+            ? mongoose.Types.ObjectId
+            : never
 
 type EnumOrType<T, E extends Enum | undefined> = E extends Enum ? E[number] : T
 

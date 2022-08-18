@@ -8,7 +8,8 @@ const userSchema = {
   age: Number,
   metadata: Object,
   bestFriend: mongoose.Types.ObjectId,
-  birthdate: Date
+  birthdate: Date,
+  isOk: {type: Boolean, required: true as const}
 }
 
 type User = InferFromSchema<typeof userSchema>;
@@ -18,5 +19,6 @@ const user: User = {
   age: 39,
   metadata: {whatever: 'the value', nested: {is: 'also possible', number: 2}},
   bestFriend: new mongoose.Types.ObjectId(),
-  birthdate: new Date()
+  birthdate: new Date(),
+  isOk: false
 }

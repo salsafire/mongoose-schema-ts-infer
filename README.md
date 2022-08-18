@@ -63,7 +63,7 @@ We don't support (yet) all the types. They will come! Feel free to create MR to 
 | `Number`     | `number`        |
 | `Date`       | `Date`          |
 | `Buffer`     | ❌               |
-| `Boolean`    | ❌               |
+| `Boolean`    | `boolean`       |
 | `Mixed`      | ❌               |
 | `Object`     | `object`        |
 | `ObjectId`   | `ObjectId`      |
@@ -84,6 +84,7 @@ For the latter, some options are also taken into account:
 # Examples
 
 All examples are available in the [examples](./examples) folder:
+
 - [The basics](./examples/basic.ts)
 - [enum option](./examples/enum.ts)
 - [array](./examples/array.ts)
