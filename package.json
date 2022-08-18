@@ -1,6 +1,6 @@
 {
   "name": "mongoose-schema-ts-infer",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "description": "Infer document type from mongoose schema",
   "main": "./lib/index.js",
   "types": "./lib/index.d.ts",
@@ -14,7 +14,8 @@
   "scripts": {
     "lint:check": "eslint --ext .ts ./src",
     "lint:fix": "eslint --fix --ext .ts ./src",
-    "build": "tsc"
+    "build": "tsc -p tsconfig.build.json",
+    "test": "tsc -p tsconfig.test.json"
   },
   "repository": {
     "type": "git",
