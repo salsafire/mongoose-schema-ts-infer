@@ -15,8 +15,16 @@ npm i mongoose-schema-ts-infer
 1. Create a mongoose schema:
 ```
 const user = {
-  name: {type: String, required: true as const},
-  favoriteColor: {type: String, required: false as const, enum: ['white', 'black'] as const},
+  name: {
+    type: String, 
+    required: true as const
+  },
+  email: String,
+  favoriteColor: {
+    type: String, 
+    required: false as const, 
+    enum: ['white', 'black'] as const
+  },
 }
 ```
 > **Warning**
@@ -31,10 +39,43 @@ const document: IUser = {
   name: 'Nicolas',
   favoriteColor: 'white'
 }
+
+// IUser type is:
+{ 
+    name: string, 
+    email?: string
+    favoriteColor?: 'white'|'black
+}
 ```
-`IUser` type is `{name:string, favoriteColor?: 'white'|'black}`.
+
+# Supported types
+
+We don't support (yet) all the types. They will come! Feel free to create MR to add if you are in the hurry 😁.
+
+| Schema type  | typescript type |
+|--------------|-----------------|
+| `String`     | `string`        |
+| `Number`     | `number`        |
+| `Date`       | `Date`          |
+| `Buffer`     | ❌               |
+| `Boolean`    | ❌               |
+| `Mixed`      | ❌               |
+| `Object`     | `object`        |
+| `ObjectId`   | `ObjectId`      |
+| `Array`      | `Array`         |
+| `Decimal128` | ❌               |
+| `Map`        | ❌               |
+| `Schema`     | ❌               |
+| Nested       | ✅               |
+
+Both shorthand notation (`{name: String}`) and "classic" notation (`{name: {type: String}}`) are supported. 
+For the latter, some options are also taken into account: 
+
+| Option name | typescript infer                                            | Example                                                                                |
+|-------------|-------------------------------------------------------------|----------------------------------------------------------------------------------------|
+| `required`  | Mark the field as optional or not (default:`false`)         | `{name: {type: String, required: false as const} }` gives `{name?:string}`             |
+| `enum`      | Restrict the value to one of the specified item in the list | `{accept: {type: String, enum: ['yes','no'] as const} }` gives `{accept:'yes' / 'no'}` |
+
 
 # TODO
-- List of what we support
-- List of what we want to support
 - Add automated tests
