@@ -1,13 +1,13 @@
 import mongoose, { Schema } from 'mongoose'
 
 type Type =
-  | StringConstructor
-  | DateConstructor
-  | ObjectConstructor
-  | NumberConstructor
-  | BooleanConstructor
-  | BufferConstructor | 'buffer' | 'Buffer' | typeof Schema.Types.Buffer
-  | MapConstructor
+  | typeof String
+  | typeof Date
+  | typeof Object
+  | typeof Number
+  | typeof Boolean
+  | typeof Buffer | 'buffer' | 'Buffer' | typeof Schema.Types.Buffer
+  | typeof Map
   | typeof Schema.Types.Mixed
   | typeof mongoose.Types.ObjectId
   | typeof mongoose.Types.Decimal128
@@ -38,19 +38,19 @@ type MapType<Field extends FieldType> = Field['of'] extends Type
   ? Map<string, ConvertSchemaTypeToTypescriptType<{ type: Field['of'] }>>
   : Map<string, any>
 
-type ConvertSchemaTypeToTypescriptType<Field extends FieldType> = Field['type'] extends StringConstructor
+type ConvertSchemaTypeToTypescriptType<Field extends FieldType> = Field['type'] extends typeof String
   ? string
-  : Field['type'] extends BooleanConstructor
+  : Field['type'] extends typeof Boolean
     ? boolean
-    : Field['type'] extends DateConstructor
+    : Field['type'] extends typeof Date
       ? Date
-      : Field['type'] extends NumberConstructor
+      : Field['type'] extends typeof Number
         ? number
         : Field['type'] extends typeof Buffer | 'buffer' | 'Buffer' | typeof Schema.Types.Buffer
           ? Buffer
-          : Field['type'] extends MapConstructor
+          : Field['type'] extends typeof Map
             ? MapType<Field>
-            : Field['type'] extends ObjectConstructor
+            : Field['type'] extends typeof Object
               ? Record<string, unknown>
               : Field['type'] extends typeof Schema.Types.Mixed
                 ? Record<string, unknown>

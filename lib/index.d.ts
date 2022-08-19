@@ -1,6 +1,6 @@
 /// <reference types="node" />
-import mongoose from 'mongoose';
-declare type Type = StringConstructor | DateConstructor | ObjectConstructor | NumberConstructor | BooleanConstructor | BufferConstructor | MapConstructor | typeof mongoose.Schema.Types.Mixed | typeof mongoose.Types.ObjectId | typeof mongoose.Types.Decimal128;
+import mongoose, { Schema } from 'mongoose';
+declare type Type = typeof String | typeof Date | typeof Object | typeof Number | typeof Boolean | typeof Buffer | 'buffer' | 'Buffer' | typeof Schema.Types.Buffer | typeof Map | typeof Schema.Types.Mixed | typeof mongoose.Types.ObjectId | typeof mongoose.Types.Decimal128;
 declare type Enum = readonly unknown[];
 interface FieldType {
     type: Type;
@@ -11,12 +11,12 @@ interface FieldType {
 declare type ShorthandNotation = Type;
 declare type ClassicNotation = FieldType;
 interface SchemaType {
-    [key: string]: ShorthandNotation | ClassicNotation | ShorthandNotation[] | ClassicNotation[] | SchemaType | SchemaType[];
+    [key: string]: ShorthandNotation | ClassicNotation | ShorthandNotation[] | ClassicNotation[] | SchemaType | SchemaType[] | Schema;
 }
 declare type MapType<Field extends FieldType> = Field['of'] extends Type ? Map<string, ConvertSchemaTypeToTypescriptType<{
     type: Field['of'];
 }>> : Map<string, any>;
-declare type ConvertSchemaTypeToTypescriptType<Field extends FieldType> = Field['type'] extends StringConstructor ? string : Field['type'] extends BooleanConstructor ? boolean : Field['type'] extends DateConstructor ? Date : Field['type'] extends NumberConstructor ? number : Field['type'] extends BufferConstructor ? Buffer : Field['type'] extends MapConstructor ? MapType<Field> : Field['type'] extends ObjectConstructor ? Record<string, unknown> : Field['type'] extends typeof mongoose.Schema.Types.Mixed ? Record<string, unknown> : Field['type'] extends typeof mongoose.Types.ObjectId ? mongoose.Types.ObjectId : Field['type'] extends typeof mongoose.Types.Decimal128 ? mongoose.Types.Decimal128 : never;
+declare type ConvertSchemaTypeToTypescriptType<Field extends FieldType> = Field['type'] extends typeof String ? string : Field['type'] extends typeof Boolean ? boolean : Field['type'] extends typeof Date ? Date : Field['type'] extends typeof Number ? number : Field['type'] extends typeof Buffer | 'buffer' | 'Buffer' | typeof Schema.Types.Buffer ? Buffer : Field['type'] extends typeof Map ? MapType<Field> : Field['type'] extends typeof Object ? Record<string, unknown> : Field['type'] extends typeof Schema.Types.Mixed ? Record<string, unknown> : Field['type'] extends typeof mongoose.Types.ObjectId ? mongoose.Types.ObjectId : Field['type'] extends typeof mongoose.Types.Decimal128 ? mongoose.Types.Decimal128 : never;
 declare type EnumOrType<T, E extends Enum | undefined> = E extends Enum ? E[number] : T;
 declare type MaybeRequired<Type, Required = true | false | undefined> = Required extends true ? Type : Type | undefined;
 declare type ConvertShorthandNotation<T extends ShorthandNotation> = MaybeRequired<ConvertSchemaTypeToTypescriptType<{
@@ -28,7 +28,7 @@ declare type RequiredKeys<TObj extends Record<string, unknown>> = {
 }[keyof TObj];
 declare type ExtractRequiredFields<TObj extends Record<string, unknown>> = Pick<TObj, RequiredKeys<TObj>>;
 export declare type InferFromSchema<Schema extends SchemaType> = Partial<ConvertSchemaToTypescriptType<Schema>> & ExtractRequiredFields<ConvertSchemaToTypescriptType<Schema>>;
-declare type ConvertSchemaToTypescriptType<Schema extends SchemaType> = {
-    [Field in keyof Schema]: Schema[Field] extends ShorthandNotation ? ConvertShorthandNotation<Schema[Field]> : Schema[Field] extends ClassicNotation ? ConvertClassicNotation<Schema[Field]> : Schema[Field] extends ShorthandNotation[] ? Array<ConvertShorthandNotation<Schema[Field][number]>> : Schema[Field] extends ClassicNotation[] ? Array<ConvertClassicNotation<Schema[Field][number]>> : Schema[Field] extends SchemaType ? InferFromSchema<Schema[Field]> : Schema[Field] extends SchemaType[] ? Array<InferFromSchema<Schema[Field][number]>> : never;
+declare type ConvertSchemaToTypescriptType<TSchema extends SchemaType> = {
+    [Field in keyof TSchema]: TSchema[Field] extends Schema<infer SubSchemaType> ? SubSchemaType : TSchema[Field] extends ShorthandNotation ? ConvertShorthandNotation<TSchema[Field]> : TSchema[Field] extends ClassicNotation ? ConvertClassicNotation<TSchema[Field]> : TSchema[Field] extends ShorthandNotation[] ? Array<ConvertShorthandNotation<TSchema[Field][number]>> : TSchema[Field] extends ClassicNotation[] ? Array<ConvertClassicNotation<TSchema[Field][number]>> : TSchema[Field] extends SchemaType ? InferFromSchema<TSchema[Field]> : TSchema[Field] extends SchemaType[] ? Array<InferFromSchema<TSchema[Field][number]>> : never;
 };
 export {};

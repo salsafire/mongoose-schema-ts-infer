@@ -1,6 +1,6 @@
 {
   "name": "mongoose-schema-ts-infer",
-  "version": "0.1.11",
+  "version": "0.1.12",
   "description": "Infer document type from mongoose schema",
   "main": "./lib/index.js",
   "types": "./lib/index.d.ts",
