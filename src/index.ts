@@ -39,7 +39,7 @@ type MapType<Field extends FieldType> = Field['of'] extends Type
   : Map<string, any>
 
 type ConvertSchemaTypeToTypescriptType<Field extends FieldType> = Field['type'] extends typeof String
-  ? string
+  ? EnumOrString<Field['enum']>
   : Field['type'] extends typeof Boolean
     ? boolean
     : Field['type'] extends typeof Date
@@ -60,14 +60,14 @@ type ConvertSchemaTypeToTypescriptType<Field extends FieldType> = Field['type'] 
                     ? mongoose.Types.Decimal128
                     : never
 
-type EnumOrType<T, E extends Enum | undefined> = E extends Enum ? E[number] : T
+type EnumOrString<E extends Enum | undefined> = E extends Enum ? E[number] : string
 
 type MaybeRequired<Type, Required = true | false | undefined> = Required extends true
   ? Type
   : Type | undefined
 
 type ConvertShorthandNotation<T extends ShorthandNotation> = MaybeRequired<ConvertSchemaTypeToTypescriptType<{ type: T }>, false>
-type ConvertClassicNotation<Field extends ClassicNotation> = MaybeRequired<EnumOrType<ConvertSchemaTypeToTypescriptType<Field>, Field['enum']>, Field['required']>
+type ConvertClassicNotation<Field extends ClassicNotation> = MaybeRequired<ConvertSchemaTypeToTypescriptType<Field>, Field['required']>
 
 type RequiredKeys<TObj extends Record<string, unknown>> = {
   [Field in keyof TObj]: TObj[Field] extends Exclude<TObj[Field], undefined>

@@ -16,13 +16,13 @@ interface SchemaType {
 declare type MapType<Field extends FieldType> = Field['of'] extends Type ? Map<string, ConvertSchemaTypeToTypescriptType<{
     type: Field['of'];
 }>> : Map<string, any>;
-declare type ConvertSchemaTypeToTypescriptType<Field extends FieldType> = Field['type'] extends typeof String ? string : Field['type'] extends typeof Boolean ? boolean : Field['type'] extends typeof Date ? Date : Field['type'] extends typeof Number ? number : Field['type'] extends typeof Buffer | 'buffer' | 'Buffer' | typeof Schema.Types.Buffer ? Buffer : Field['type'] extends typeof Map ? MapType<Field> : Field['type'] extends typeof Object ? Record<string, unknown> : Field['type'] extends typeof Schema.Types.Mixed ? Record<string, unknown> : Field['type'] extends typeof mongoose.Types.ObjectId ? mongoose.Types.ObjectId : Field['type'] extends typeof mongoose.Types.Decimal128 ? mongoose.Types.Decimal128 : never;
-declare type EnumOrType<T, E extends Enum | undefined> = E extends Enum ? E[number] : T;
+declare type ConvertSchemaTypeToTypescriptType<Field extends FieldType> = Field['type'] extends typeof String ? EnumOrString<Field['enum']> : Field['type'] extends typeof Boolean ? boolean : Field['type'] extends typeof Date ? Date : Field['type'] extends typeof Number ? number : Field['type'] extends typeof Buffer | 'buffer' | 'Buffer' | typeof Schema.Types.Buffer ? Buffer : Field['type'] extends typeof Map ? MapType<Field> : Field['type'] extends typeof Object ? Record<string, unknown> : Field['type'] extends typeof Schema.Types.Mixed ? Record<string, unknown> : Field['type'] extends typeof mongoose.Types.ObjectId ? mongoose.Types.ObjectId : Field['type'] extends typeof mongoose.Types.Decimal128 ? mongoose.Types.Decimal128 : never;
+declare type EnumOrString<E extends Enum | undefined> = E extends Enum ? E[number] : string;
 declare type MaybeRequired<Type, Required = true | false | undefined> = Required extends true ? Type : Type | undefined;
 declare type ConvertShorthandNotation<T extends ShorthandNotation> = MaybeRequired<ConvertSchemaTypeToTypescriptType<{
     type: T;
 }>, false>;
-declare type ConvertClassicNotation<Field extends ClassicNotation> = MaybeRequired<EnumOrType<ConvertSchemaTypeToTypescriptType<Field>, Field['enum']>, Field['required']>;
+declare type ConvertClassicNotation<Field extends ClassicNotation> = MaybeRequired<ConvertSchemaTypeToTypescriptType<Field>, Field['required']>;
 declare type RequiredKeys<TObj extends Record<string, unknown>> = {
     [Field in keyof TObj]: TObj[Field] extends Exclude<TObj[Field], undefined> ? Field : never;
 }[keyof TObj];

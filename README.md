@@ -81,11 +81,11 @@ We don't support (yet) all the types. They will come! Feel free to create MR to 
 Both shorthand notation (`{name: String}`) and "classic" notation (`{name: {type: String}}`) are supported.
 For the latter, some options are also taken into account:
 
-| Option name | typescript infer                                                 | Example                                                                                |
-|-------------|------------------------------------------------------------------|----------------------------------------------------------------------------------------|
-| `required`  | Mark the field as optional or not (default:`false`)              | `{name: {type: String, required: false as const} }` gives `{name?:string}`             |
-| `enum`      | Restrict the value to one of the specified item in the list      | `{accept: {type: String, enum: ['yes','no'] as const} }` gives `{accept:'yes' / 'no'}` |
-| `of`        | Restrict values of the `Map` to a specific type (default: `any`) | `{name: {type: Map, of: Number} }` gives `{name?: Map<string,number>}`                 |
+| Option name                     | typescript infer                                                 | Example                                                                                |
+|---------------------------------|------------------------------------------------------------------|----------------------------------------------------------------------------------------|
+| `required`                      | Mark the field as optional or not (default:`false`)              | `{name: {type: String, required: false as const} }` gives `{name?:string}`             |
+| `enum` (only for `String` type) | Restrict the value to one of the specified item in the list      | `{accept: {type: String, enum: ['yes','no'] as const} }` gives `{accept:'yes' / 'no'}` |
+| `of` (only for `Map` type)      | Restrict values of the `Map` to a specific type (default: `any`) | `{name: {type: Map, of: Number} }` gives `{name?: Map<string,number>}`                 |
 
 # Examples
 
