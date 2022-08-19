@@ -18,24 +18,26 @@ interface FieldType {
   type: Type
   required?: boolean
   enum?: readonly unknown[]
-  of?: Type
+  of?: SchemaFieldType
 }
 
 type ShorthandNotation = Type
 type ClassicNotation = FieldType
 
+type SchemaFieldType = ShorthandNotation
+| ClassicNotation
+| ShorthandNotation[]
+| ClassicNotation[]
+| SchemaType
+| SchemaType[]
+| Schema
+
 interface SchemaType {
-  [key: string]: ShorthandNotation
-  | ClassicNotation
-  | ShorthandNotation[]
-  | ClassicNotation[]
-  | SchemaType
-  | SchemaType[]
-  | Schema
+  [key: string]: SchemaFieldType
 }
 
-type MapType<Field extends FieldType> = Field['of'] extends Type
-  ? Map<string, ConvertSchemaTypeToTypescriptType<{ type: Field['of'] }>>
+type MapType<Field extends FieldType> = Field['of'] extends SchemaFieldType
+  ? Map<string, ConvertFieldType<Field['of']>>
   : Map<string, any>
 
 type ConvertSchemaTypeToTypescriptType<Field extends FieldType> = Field['type'] extends typeof String
@@ -80,20 +82,22 @@ type ExtractRequiredFields<TObj extends Record<string, unknown>> = Pick<TObj, Re
 export type InferFromSchema<Schema extends SchemaType> =
   Partial<ConvertSchemaToTypescriptType<Schema>> & ExtractRequiredFields<ConvertSchemaToTypescriptType<Schema>>
 
+type ConvertFieldType<Field extends SchemaFieldType> = Field extends Schema<infer SubSchemaType>
+  ? SubSchemaType
+  : Field extends ShorthandNotation
+    ? ConvertShorthandNotation<Field>
+    : Field extends ClassicNotation
+      ? ConvertClassicNotation<Field>
+      : Field extends ShorthandNotation[]
+        ? Array<ConvertShorthandNotation<Field[number]>>
+        : Field extends ClassicNotation[]
+          ? Array<ConvertClassicNotation<Field[number]>>
+          : Field extends SchemaType
+            ? InferFromSchema<Field>
+            : Field extends SchemaType[]
+              ? Array<InferFromSchema<Field[number]>>
+              : never
+
 type ConvertSchemaToTypescriptType<TSchema extends SchemaType> = {
-  [Field in keyof TSchema]: TSchema[Field] extends Schema<infer SubSchemaType>
-    ? SubSchemaType
-    : TSchema[Field] extends ShorthandNotation
-      ? ConvertShorthandNotation<TSchema[Field]>
-      : TSchema[Field] extends ClassicNotation
-        ? ConvertClassicNotation<TSchema[Field]>
-        : TSchema[Field] extends ShorthandNotation[]
-          ? Array<ConvertShorthandNotation<TSchema[Field][number]>>
-          : TSchema[Field] extends ClassicNotation[]
-            ? Array<ConvertClassicNotation<TSchema[Field][number]>>
-            : TSchema[Field] extends SchemaType
-              ? InferFromSchema<TSchema[Field]>
-              : TSchema[Field] extends SchemaType[]
-                ? Array<InferFromSchema<TSchema[Field][number]>>
-                : never;
+  [Field in keyof TSchema]: ConvertFieldType<TSchema[Field]>;
 }

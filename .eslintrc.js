@@ -7,7 +7,7 @@ module.exports = {
   overrides: [],
   parserOptions: {
     ecmaVersion: 'latest',
-    project: './tsconfig.json'
+    project: './tsconfig.build.json'
   },
   rules: {}
 }
