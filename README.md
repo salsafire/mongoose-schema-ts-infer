@@ -1,10 +1,12 @@
 # What does it do and why?
 
-`mongoose` has [typescript support](https://mongoosejs.com/docs/typescript.html), it still a bit too light.
-Everytime we create a schema, we must create an interface representing a document in MongoDB.
-Don't you feel that we have to type "the same thing" twice?
+`mongoose` has [typescript support](https://mongoosejs.com/docs/typescript.html) since `v5.11.0`.
 
-**This library infers the document type from the schema!** And that's it 😁
+[But until `mongoose@>=6.3.1`](https://mongoosejs.com/docs/typescript/schemas.html), everytime we create a schema, we must create an interface representing a document in MongoDB.
+
+The bad news is that, if you are using `mongoose@<6.3.1`, you don't have `InferSchemaType`. 
+
+**This library has been made for these people 😁**
 
 # Install
 
@@ -57,21 +59,21 @@ const document: IUser = {
 
 We don't support (yet) all the types. They will come! Feel free to create MR to add if you are in the hurry 😁.
 
-| Schema type                   | typescript type             |
-|-------------------------------|-----------------------------|
-| `String`                      | `string`                    |
-| `Number`                      | `number`                    |
-| `Date`                        | `Date`                      |
-| `Buffer`                      | `Buffer`                    |
-| `Boolean`                     | `boolean`                   |
-| `mongoose.Schema.Types.Mixed` | `object`                    |
-| `Object`                      | `object`                    |
-| `mongoose.Types.ObjectId`     | `mongoose.Types.ObjectId`   |
-| `Array`                       | `Array`                     |
-| `mongoose.Types.Decimal128`   | `mongoose.Types.Decimal128` |
-| `Map`                         | `Map`                       |
-| `Schema`                      | ❌                           |
-| Nested                        | ✅                           |
+| Schema type                   | typescript type                                      |
+|-------------------------------|------------------------------------------------------|
+| `String`                      | `string`                                             |
+| `Number`                      | `number`                                             |
+| `Date`                        | `Date`                                               |
+| `Buffer`                      | `Buffer`                                             |
+| `Boolean`                     | `boolean`                                            |
+| `mongoose.Schema.Types.Mixed` | `object`                                             |
+| `Object`                      | `object`                                             |
+| `mongoose.Types.ObjectId`     | `mongoose.Types.ObjectId`                            |
+| `Array`                       | `Array`                                              |
+| `mongoose.Types.Decimal128`   | `mongoose.Types.Decimal128`                          |
+| `Map`                         | `Map`                                                |
+| `Schema`                      | Inferred from the generic given during instantiation |
+| Nested                        | ✅                                                    |
 
 Both shorthand notation (`{name: String}`) and "classic" notation (`{name: {type: String}}`) are supported.
 For the latter, some options are also taken into account:
@@ -91,3 +93,4 @@ All examples are available in the "[examples](./examples)" folder:
 - [array](./examples/array.ts)
 - [nested schema](./examples/nested.ts)
 - [Map](./examples/map.ts)
+- [Sub document/schema](./examples/sub-schema.ts)

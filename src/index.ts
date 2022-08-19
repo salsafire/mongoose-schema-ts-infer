@@ -1,4 +1,4 @@
-import mongoose from 'mongoose'
+import mongoose, { Schema } from 'mongoose'
 
 type Type =
   | StringConstructor
@@ -31,6 +31,7 @@ interface SchemaType {
   | ClassicNotation[]
   | SchemaType
   | SchemaType[]
+  | Schema
 }
 
 type MapType<Field extends FieldType> = Field['of'] extends Type
@@ -79,18 +80,20 @@ type ExtractRequiredFields<TObj extends Record<string, unknown>> = Pick<TObj, Re
 export type InferFromSchema<Schema extends SchemaType> =
   Partial<ConvertSchemaToTypescriptType<Schema>> & ExtractRequiredFields<ConvertSchemaToTypescriptType<Schema>>
 
-type ConvertSchemaToTypescriptType<Schema extends SchemaType> = {
-  [Field in keyof Schema]: Schema[Field] extends ShorthandNotation
-    ? ConvertShorthandNotation<Schema[Field]>
-    : Schema[Field] extends ClassicNotation
-      ? ConvertClassicNotation<Schema[Field]>
-      : Schema[Field] extends ShorthandNotation[]
-        ? Array<ConvertShorthandNotation<Schema[Field][number]>>
-        : Schema[Field] extends ClassicNotation[]
-          ? Array<ConvertClassicNotation<Schema[Field][number]>>
-          : Schema[Field] extends SchemaType
-            ? InferFromSchema<Schema[Field]>
-            : Schema[Field] extends SchemaType[]
-              ? Array<InferFromSchema<Schema[Field][number]>>
-              : never;
+type ConvertSchemaToTypescriptType<TSchema extends SchemaType> = {
+  [Field in keyof TSchema]: TSchema[Field] extends Schema<infer SubSchemaType>
+    ? SubSchemaType
+    : TSchema[Field] extends ShorthandNotation
+      ? ConvertShorthandNotation<TSchema[Field]>
+      : TSchema[Field] extends ClassicNotation
+        ? ConvertClassicNotation<TSchema[Field]>
+        : TSchema[Field] extends ShorthandNotation[]
+          ? Array<ConvertShorthandNotation<TSchema[Field][number]>>
+          : TSchema[Field] extends ClassicNotation[]
+            ? Array<ConvertClassicNotation<TSchema[Field][number]>>
+            : TSchema[Field] extends SchemaType
+              ? InferFromSchema<TSchema[Field]>
+              : TSchema[Field] extends SchemaType[]
+                ? Array<InferFromSchema<TSchema[Field][number]>>
+                : never;
 }
