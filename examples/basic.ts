@@ -11,7 +11,10 @@ const userSchema = {
   bestFriend: mongoose.Types.ObjectId,
   birthdate: Date,
   isOk: {type: Boolean, required: true as const},
-  buf: Buffer,
+  buf1: Buffer,
+  buf2: 'buffer' as const,
+  buf3: 'Buffer' as const,
+  buf4: mongoose.Schema.Types.Buffer,
   dec: {type: mongoose.Types.Decimal128}
 }
 
@@ -25,6 +28,9 @@ const user: User = {
   bestFriend: new mongoose.Types.ObjectId(),
   birthdate: new Date(),
   isOk: false,
-  buf: Buffer.from('Hello, World'),
+  buf1: Buffer.from('Hello, World'),
+  buf2: Buffer.from('Hello, World'),
+  buf3: Buffer.from('Hello, World'),
+  buf4: Buffer.from('Hello, World'),
   dec: new mongoose.Types.Decimal128('11')
 }

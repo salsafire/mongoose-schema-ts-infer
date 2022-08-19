@@ -6,9 +6,9 @@ type Type =
   | ObjectConstructor
   | NumberConstructor
   | BooleanConstructor
-  | BufferConstructor
+  | BufferConstructor | 'buffer' | 'Buffer' | typeof Schema.Types.Buffer
   | MapConstructor
-  | typeof mongoose.Schema.Types.Mixed
+  | typeof Schema.Types.Mixed
   | typeof mongoose.Types.ObjectId
   | typeof mongoose.Types.Decimal128
 
@@ -46,13 +46,13 @@ type ConvertSchemaTypeToTypescriptType<Field extends FieldType> = Field['type'] 
       ? Date
       : Field['type'] extends NumberConstructor
         ? number
-        : Field['type'] extends BufferConstructor
+        : Field['type'] extends typeof Buffer | 'buffer' | 'Buffer' | typeof Schema.Types.Buffer
           ? Buffer
           : Field['type'] extends MapConstructor
             ? MapType<Field>
             : Field['type'] extends ObjectConstructor
               ? Record<string, unknown>
-              : Field['type'] extends typeof mongoose.Schema.Types.Mixed
+              : Field['type'] extends typeof Schema.Types.Mixed
                 ? Record<string, unknown>
                 : Field['type'] extends typeof mongoose.Types.ObjectId
                   ? mongoose.Types.ObjectId
