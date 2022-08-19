@@ -59,24 +59,24 @@ const document: IUser = {
 
 We don't support (yet) all the types. They will come! Feel free to create MR to add if you are in the hurry 😁.
 
-| Schema type                    | typescript type                                      |
-|--------------------------------|------------------------------------------------------|
-| `String`                       | `string`                                             |
-| `Number`                       | `number`                                             |
-| `Date`                         | `Date`                                               |
-| `Buffer`                       | `Buffer`                                             |
-| `"buffer"`                     | `Buffer`                                             |
-| `"Buffer"`                     | `Buffer`                                             |
-| `mongoose.Schema.Types.Buffer` | `Buffer`                                             |
-| `Boolean`                      | `boolean`                                            |
-| `mongoose.Schema.Types.Mixed`  | `object`                                             |
-| `Object`                       | `object`                                             |
-| `mongoose.Types.ObjectId`      | `mongoose.Types.ObjectId`                            |
-| `Array`                        | `Array`                                              |
-| `mongoose.Types.Decimal128`    | `mongoose.Types.Decimal128`                          |
-| `Map`                          | `Map`                                                |
-| `Schema`                       | Inferred from the generic given during instantiation |
-| Nested                         | ✅                                                    |
+| Schema type                        | typescript type                                      |
+|------------------------------------|------------------------------------------------------|
+| `String`                           | `string`                                             |
+| `Number`                           | `number`                                             |
+| `Date`                             | `Date`                                               |
+| `Buffer`                           | `Buffer`                                             |
+| `"buffer"`                         | `Buffer`                                             |
+| `"Buffer"`                         | `Buffer`                                             |
+| `mongoose.Schema.Types.Buffer`     | `Buffer`                                             |
+| `Boolean`                          | `boolean`                                            |
+| `mongoose.Schema.Types.Mixed`      | `any`                                                |
+| `Object`                           | `any`                                                |
+| `mongoose.Schema.Typ@es.ObjectId`  | `mongoose.Types.ObjectId`                            |
+| `Array`                            | `Array`                                              |
+| `mongoose.Schema.Types.Decimal128` | `mongoose.Types.Decimal128`                          |
+| `Map`                              | `Map`                                                |
+| `Schema`                           | Inferred from the generic given during instantiation |
+| Nested                             | ✅                                                    |
 
 Both shorthand notation (`{name: String}`) and "classic" notation (`{name: {type: String}}`) are supported.
 For the latter, some options are also taken into account:

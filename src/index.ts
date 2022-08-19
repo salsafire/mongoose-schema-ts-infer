@@ -9,8 +9,8 @@ type Type =
   | typeof Buffer | 'buffer' | 'Buffer' | typeof Schema.Types.Buffer
   | typeof Map
   | typeof Schema.Types.Mixed
-  | typeof mongoose.Types.ObjectId
-  | typeof mongoose.Types.Decimal128
+  | typeof Schema.Types.ObjectId
+  | typeof Schema.Types.Decimal128
 
 type Enum = readonly unknown[]
 
@@ -51,12 +51,12 @@ type ConvertSchemaTypeToTypescriptType<Field extends FieldType> = Field['type'] 
           : Field['type'] extends typeof Map
             ? MapType<Field>
             : Field['type'] extends typeof Object
-              ? Record<string, unknown>
+              ? any
               : Field['type'] extends typeof Schema.Types.Mixed
-                ? Record<string, unknown>
-                : Field['type'] extends typeof mongoose.Types.ObjectId
+                ? any
+                : Field['type'] extends typeof mongoose.Schema.Types.ObjectId
                   ? mongoose.Types.ObjectId
-                  : Field['type'] extends typeof mongoose.Types.Decimal128
+                  : Field['type'] extends typeof mongoose.Schema.Types.Decimal128
                     ? mongoose.Types.Decimal128
                     : never
 
