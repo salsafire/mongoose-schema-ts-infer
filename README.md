@@ -4,9 +4,7 @@
 
 [But until `mongoose@>=6.3.1`](https://mongoosejs.com/docs/typescript/schemas.html), everytime we create a schema, we must create an interface representing a document in MongoDB.
 
-The bad news is that, if you are using `mongoose@<6.3.1`, you don't have `InferSchemaType`. 
-
-**This library has been made for these people 😁**
+**This library has been made for these people 😁**: Create your schema and infer the document type from it!
 
 # Install
 
