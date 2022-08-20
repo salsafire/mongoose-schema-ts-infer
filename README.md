@@ -17,7 +17,7 @@ npm i mongoose-schema-ts-infer
 1. Create a mongoose schema:
 
 ```
-const user = {
+const userSchema = {
   name: {
     type: String, 
     required: true as const
@@ -39,17 +39,22 @@ const user = {
 ```
 import {InferFromSchema} from "mongoose-schema-ts-infer";
 
-type IUser = InferFromSchema<typeof schema>;
+type IUser = InferFromSchema<typeof userSchema>;
+
+/**
+ * `IUser` type is equivalent to:
+ * { 
+ *     _id ?: ObjectId
+ *     name: string, 
+ *     email?: string
+ *     favoriteColor?: 'white'|'black
+ * }
+**/
+
+
 const document: IUser = {
   name: 'Nicolas',
   favoriteColor: 'white'
-}
-
-// IUser type is:
-{ 
-    name: string, 
-    email?: string
-    favoriteColor?: 'white'|'black
 }
 ```
 
