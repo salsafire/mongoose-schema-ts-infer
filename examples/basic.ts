@@ -23,6 +23,7 @@ const userSchema = {
 type User = InferFromSchema<typeof userSchema>;
 
 const user: User = {
+  _id: new mongoose.Types.ObjectId(), // _id is optional
   email: 'hello@mongoose.com',
   age: 39,
   metadata1: {whatever: 'the value', nested: {is: 'also possible', number: 2}},
