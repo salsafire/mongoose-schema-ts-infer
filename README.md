@@ -100,3 +100,17 @@ All examples are available in the "[examples](./examples)" folder:
 - [nested schema](./examples/nested.ts)
 - [Map](./examples/map.ts)
 - [Sub document/schema](./examples/sub-schema.ts)
+
+# Test, transpile and publish on npm
+
+Before publishing, we need to transpile the code into `lib` and make sure everything works:
+
+```
+npm test && npm run build
+```
+
+For publishing on npm (make sure to update the version in `package.json` first):
+
+```
+npm publish
+```
