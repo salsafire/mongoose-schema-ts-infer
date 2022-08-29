@@ -1,5 +1,5 @@
-import {InferFromSchema} from "../src";
-import mongoose, {Schema} from 'mongoose'
+import {InferFromSchema, InferFromSchemaWithId} from "../src";
+import mongoose from 'mongoose'
 
 const userSchema = {
   name: String, // optional
@@ -23,7 +23,6 @@ const userSchema = {
 type User = InferFromSchema<typeof userSchema>;
 
 const user: User = {
-  _id: new mongoose.Types.ObjectId(), // _id is optional
   email: 'hello@mongoose.com',
   age: 39,
   metadata1: {whatever: 'the value', nested: {is: 'also possible', number: 2}},
@@ -38,4 +37,13 @@ const user: User = {
   buf3: Buffer.from('Hello, World'),
   buf4: Buffer.from('Hello, World'),
   dec: new mongoose.Types.Decimal128('11')
+}
+
+
+const anotherSchema = {};
+type UserWithId = InferFromSchemaWithId<typeof anotherSchema>
+
+
+const useWithId: UserWithId = {
+  _id: new mongoose.Types.ObjectId()
 }

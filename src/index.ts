@@ -100,4 +100,6 @@ type ConvertFieldType<Field extends SchemaFieldType> = Field extends Schema<infe
 
 type ConvertSchemaToTypescriptType<TSchema extends SchemaType> = {
   [Field in keyof TSchema]: ConvertFieldType<TSchema[Field]>;
-} & { _id: mongoose.Types.ObjectId | undefined }
+}
+
+export type InferFromSchemaWithId<TSchema extends SchemaType> = InferFromSchema<TSchema> & { _id: mongoose.Types.ObjectId }
