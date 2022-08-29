@@ -30,7 +30,8 @@ export declare type InferFromSchema<Schema extends SchemaType> = Partial<Convert
 declare type ConvertFieldType<Field extends SchemaFieldType> = Field extends Schema<infer SubSchemaType> ? SubSchemaType : Field extends ShorthandNotation ? ConvertShorthandNotation<Field> : Field extends ClassicNotation ? ConvertClassicNotation<Field> : Field extends ShorthandNotation[] ? Array<ConvertShorthandNotation<Field[number]>> : Field extends ClassicNotation[] ? Array<ConvertClassicNotation<Field[number]>> : Field extends SchemaType ? InferFromSchema<Field> : Field extends SchemaType[] ? Array<InferFromSchema<Field[number]>> : never;
 declare type ConvertSchemaToTypescriptType<TSchema extends SchemaType> = {
     [Field in keyof TSchema]: ConvertFieldType<TSchema[Field]>;
-} & {
-    _id: mongoose.Types.ObjectId | undefined;
+};
+export declare type InferFromSchemaWithId<TSchema extends SchemaType> = InferFromSchema<TSchema> & {
+    _id: mongoose.Types.ObjectId;
 };
 export {};
